@@ -1,0 +1,78 @@
+name: Bug report / 问题反馈
+description: Report a reproducible problem in Atlas. / 反馈可复现的问题。
+title: "[Bug]: "
+labels: [bug, needs-triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve Atlas. English, Chinese and Japanese are welcome.
+        Never share .p8 files, API keys, JWTs, credentials, personal information or private app data.
+        For billing, privacy or security concerns, email support@bonjour.dev without sending credentials.
+  - type: input
+    id: version
+    attributes:
+      label: Atlas version and build / 版本与构建号
+      placeholder: "Find this in Atlas Settings. / 可在 Atlas 设置中查看。"
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device and OS / 设备与系统
+      placeholder: "iPhone model, iOS/iPadOS version"
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area / 功能范围
+      options:
+        - Accounts and authentication
+        - App information and localization
+        - App Store versions and review
+        - Builds
+        - Xcode Cloud logs or artifacts
+        - TestFlight groups and testers
+        - TestFlight information and feedback
+        - In-app purchases or subscription management
+        - Atlas Premium purchase or restore
+        - Layout, accessibility or language
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce / 复现步骤
+      placeholder: |
+        1. Open …
+        2. Tap …
+        3. Observe …
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result / 预期结果
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result and visible error / 实际结果与页面错误
+      description: Include the error code if visible, but remove private resource IDs, keys and tokens.
+    validations:
+      required: true
+  - type: textarea
+    id: attachments
+    attributes:
+      label: Screenshots or additional context / 截图与补充信息
+      description: Optional. Redact account details, customer data and private app information first.
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy / 隐私确认
+      options:
+        - label: I removed credentials, private keys, tokens and personal/private data from this report and its attachments.
+          required: true

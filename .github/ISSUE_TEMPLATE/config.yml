@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and ideas / 使用问题与建议
+    url: https://github.com/bonjour-studio/atlas-feedback/discussions
+    about: Ask for help or suggest improvements in Discussions. English, Chinese and Japanese are welcome.
+  - name: Private support / 私人支持
+    url: mailto:support@bonjour.dev?subject=Atlas%20Support
+    about: Billing, privacy, account-specific and security reports. Never send your private key.

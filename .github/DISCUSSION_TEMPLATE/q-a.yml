@@ -1,0 +1,17 @@
+title: ""
+labels: [question]
+body:
+  - type: markdown
+    attributes:
+      value: "Ask a public Atlas usage question in English, Chinese or Japanese. Never include API credentials or private app data."
+  - type: textarea
+    id: goal
+    attributes:
+      label: What are you trying to do?
+      description: Include the Atlas version and relevant feature, without credentials.
+    validations:
+      required: true
+  - type: textarea
+    id: tried
+    attributes:
+      label: What have you tried?

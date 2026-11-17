@@ -1,0 +1,19 @@
+title: ""
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: "Share a concrete improvement in English, Chinese or Japanese. Keep private information out of the discussion."
+  - type: textarea
+    id: problem
+    attributes:
+      label: What would you like to make easier?
+      description: Describe the task and where you get stuck.
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: Your suggestion
+    validations:
+      required: true
