@@ -36,7 +36,8 @@ export async function serve(request, fetchPublicSite = fetch) {
     headers.set("x-content-type-options", "nosniff");
     headers.set("referrer-policy", "strict-origin-when-cross-origin");
     headers.set("content-security-policy", "default-src 'self'; script-src 'none'; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'");
-    if (upstream.ok) headers.set("cache-control", "public, max-age=300");
+    // Preserve static email links instead of injecting a JavaScript decoder.
+    if (upstream.ok) headers.set("cache-control", "public, max-age=300, no-transform");
     return new Response(request.method === "HEAD" ? null : upstream.body, {
       status: upstream.status,
       statusText: upstream.statusText,

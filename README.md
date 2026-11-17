@@ -2,8 +2,8 @@
 
 The official public website and feedback hub for **Atlas for App Store Connect**, a native developer tool for iPhone and iPad by Bonjour, LLC.
 
-- Website: https://bonjour-studio.github.io/atlas-feedback/
-- Feedback hub: https://bonjour-studio.github.io/atlas-feedback/feedback/
+- Website: https://atlas.bonjour.dev/
+- Feedback hub: https://atlas.bonjour.dev/feedback/
 - Questions and ideas: https://github.com/bonjour-studio/atlas-feedback/discussions
 - Bug reports: https://github.com/bonjour-studio/atlas-feedback/issues/new/choose
 - Private support: [support@bonjour.dev](mailto:support@bonjour.dev)

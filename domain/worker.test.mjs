@@ -15,6 +15,7 @@ test("serves static content without forwarding credentials or query strings", as
   assert.equal(await response.text(), "Public content");
   assert.equal(response.headers.get("set-cookie"), null);
   assert.match(response.headers.get("content-security-policy"), /script-src 'none'/);
+  assert.match(response.headers.get("cache-control"), /no-transform/);
 });
 
 test("does not accept other hosts or write methods", async () => {

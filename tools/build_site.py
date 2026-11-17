@@ -7,7 +7,7 @@ import re
 ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "docs"
 REPO = "https://github.com/bonjour-studio/atlas-feedback"
-SITE = "https://bonjour-studio.github.io/atlas-feedback"
+SITE = "https://atlas.bonjour.dev"
 EMAIL = "support@bonjour.dev"
 
 COPY = {
@@ -120,7 +120,7 @@ def document(lang, kind, body, title=None):
     c = COPY[lang]
     path = c["path"]
     is_home = kind == "home"
-    depth = len([x for x in path.split("/") if x]) + (0 if is_home else 1)
+    depth = len([x for x in path.split("/") if x]) + (0 if is_home else len(kind.split("/")))
     base = "../" * depth or "./"
     home = base + path
     feedback = home + "feedback/"
@@ -149,7 +149,7 @@ def document(lang, kind, body, title=None):
 <details class="language"><summary><span aria-hidden="true">◎</span> {c['language']}</summary><div class="language-menu">{languages}</div></details>
 </nav></header>
 <main id="main">{body}</main>
-<footer class="footer shell"><div><a class="brand" href="{home}">Atlas</a><p>© 2026 Bonjour, LLC.</p></div><div class="footer-right"><nav aria-label="Footer"><a href="{feedback}">{c['nav'][2]}</a><a href="{base}privacy/">{c['footer'][0]}</a><a href="{base}terms/">{c['footer'][1]}</a><a href="{REPO}">{c['footer'][2]}</a></nav><p>{c['independent']}</p></div></footer>
+<footer class="footer shell"><div><a class="brand" href="{home}">Atlas</a><p>© 2026 Bonjour, LLC.</p></div><div class="footer-right"><nav aria-label="Footer"><a href="{feedback}">{c['nav'][2]}</a><a href="{base}legal/privacy/">{c['footer'][0]}</a><a href="{base}legal/terms/">{c['footer'][1]}</a><a href="{REPO}">{c['footer'][2]}</a></nav><p>{c['independent']}</p></div></footer>
 </body></html>'''
 
 
@@ -223,21 +223,24 @@ def build():
         (folder / "feedback").mkdir(exist_ok=True)
         (folder / "feedback/index.html").write_text(feedback(lang))
     for slug, filename, title in [("privacy", "privacy-policy.md", "Privacy Policy"), ("terms", "terms-of-use.md", "Terms of Use")]:
-        (DOCS / slug).mkdir(exist_ok=True)
         source = (DOCS / "legal" / filename).read_text()
         body = f'<article class="shell legal"><p class="eyebrow">ATLAS / LEGAL</p><h1>{title}</h1>{legal_html(source)}</article>'
-        page = document("en", slug, body, f"Atlas — {title}")
-        # The published legal text is authoritative in English; do not advertise
-        # nonexistent translated policies in language or hreflang controls.
-        page = re.sub(r'<details class="language">.*?</details>', '', page)
-        page = re.sub(r'<link rel="alternate"[^>]+>', '', page)
-        (DOCS / slug / "index.html").write_text(page)
+        for route in [slug, "legal/" + slug]:
+            (DOCS / route).mkdir(parents=True, exist_ok=True)
+            page = document("en", route, body, f"Atlas — {title}")
+            # Keep legacy GitHub Pages links working, but use the directly
+            # served legal paths on the custom domain as canonical URLs.
+            page = page.replace(f'href="{SITE}/{slug}/"', f'href="{SITE}/legal/{slug}/"')
+            # The published legal text is authoritative in English.
+            page = re.sub(r'<details class="language">.*?</details>', '', page)
+            page = re.sub(r'<link rel="alternate"[^>]+>', '', page)
+            (DOCS / route / "index.html").write_text(page)
     c = COPY["en"]
     # Absolute fallback links are needed when a missing path has unknown depth.
     (DOCS / "404.html").write_text(f'<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Atlas — Page not found</title><body style="font:18px system-ui;max-width:600px;margin:15vh auto;padding:24px"><h1>{c["not_found"]}</h1><p>{c["not_found_body"]}</p><p><a href="{SITE}/">{c["feedback_back"]}</a></p></body></html>')
     (DOCS / ".nojekyll").touch()
     (DOCS / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {SITE}/sitemap.xml\n")
-    urls = [f'{SITE}/{c["path"]}{suffix}' for c in COPY.values() for suffix in ["", "feedback/"]] + [SITE + "/privacy/", SITE + "/terms/"]
+    urls = [f'{SITE}/{c["path"]}{suffix}' for c in COPY.values() for suffix in ["", "feedback/"]] + [SITE + "/legal/privacy/", SITE + "/legal/terms/"]
     (DOCS / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + ''.join('<url><loc>'+url+'</loc></url>' for url in urls) + '</urlset>\n')
     print(f"Built {len(list(DOCS.rglob('*.html')))} static pages.")
 
